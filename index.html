@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Podvalnia_alebarda — диджитал-художник и аниматор. Галерея работ, заказ коммишек, сотрудничество." />
-  <meta name="theme-color" content="#e9e9ee" />
+  <meta name="theme-color" content="#f5c56a" />
   <title>Podvalnia_alebarda | Диджитал художник</title>
 
-  <!-- Шрифты: display (Playfair Display — высококонтрастный «мотыльковый» серив) + текст (Montserrat) + рукописный акцент (Caveat). Все с кириллицей.
+  <!-- Шрифты: display (Unbounded) + текст (Manrope) + рукописный акцент (Caveat). Все с кириллицей.
        CJK/корейский подгружается лениво в setLanguage() при выборе zh/ko.
        Оставлены только реально используемые начертания; display=swap — текст виден сразу. -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800;900&display=swap" />
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Manrope:wght@400;600;700;800&family=Unbounded:wght@700;800&display=swap" />
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800;900&display=swap" />
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Manrope:wght@400;600;700;800&family=Unbounded:wght@700;800&display=swap" />
 
   <link rel="stylesheet" href="styles.css" />
 
@@ -181,6 +181,11 @@
 
       <footer class="site-footer" id="socials" aria-label="Контакты и социальные сети">
         <div class="footer-shell">
+          <!-- Бабл с портфолио коллеги -->
+          <div class="footer-colleague">
+            <p class="footer-colleague__text" data-i18n="colleague_text">Также вы можете ознакомиться с портфолио моего коллеги и тоже что-нибудь у него заказать:</p>
+            <a href="https://9726303-blip.github.io/Kreatur_Herre/" class="cta-button footer-colleague__btn" target="_blank" rel="noopener noreferrer" data-i18n="colleague_btn">Портфолио коллеги</a>
+          </div>
           <p class="footer-title" data-i18n="footer_title">Следуй за мной в соцсетях</p>
           <div class="social-links">
             <a href="#" class="social-button" data-i18n="social_instagram">Instagram</a>

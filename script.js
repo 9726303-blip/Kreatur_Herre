@@ -197,6 +197,8 @@ document.addEventListener("DOMContentLoaded", function () {
       section: "Футер",
       fields: [
         { key: "footer_title", label: "Заголовок футера" },
+        { key: "colleague_text", label: "Текст про коллегу (над соцсетями)", type: "area" },
+        { key: "colleague_btn", label: "Кнопка «Портфолио коллеги»" },
         { key: "footer_copyright", label: "Копирайт", type: "area" },
         { key: "copy_warning", label: "Текст защиты от копирования", type: "area" },
       ],
@@ -578,6 +580,8 @@ document.addEventListener("DOMContentLoaded", function () {
       order_images_title: "Прайс",
       collab_images_title: "Карта сотрудничества",
       contact_dm_title: "Напишите мне в личные сообщения:",
+      colleague_text: "Также вы можете ознакомиться с портфолио моего коллеги и тоже что-нибудь у него заказать:",
+      colleague_btn: "Портфолио коллеги",
     },
     en: {
       order_template: "Hello! I'd like to order a commission 🎨\n\n• Name/nick: \n• Type of work: \n• Idea description: \n• References (links): \n• Budget: \n• Desired deadline: \n• How to reach me: ",
@@ -587,6 +591,8 @@ document.addEventListener("DOMContentLoaded", function () {
       order_images_title: "Price list",
       collab_images_title: "Collaboration guide",
       contact_dm_title: "Message me directly:",
+      colleague_text: "You can also check out my colleague's portfolio and order something from him too:",
+      colleague_btn: "Colleague's portfolio",
     },
     es: {
       order_template: "¡Hola! Quiero encargar una comisión 🎨\n\n• Nombre/apodo: \n• Tipo de trabajo: \n• Descripción de la idea: \n• Referencias (enlaces): \n• Presupuesto: \n• Plazo deseado: \n• Cómo contactarme: ",
@@ -596,6 +602,8 @@ document.addEventListener("DOMContentLoaded", function () {
       order_images_title: "Lista de precios",
       collab_images_title: "Guía de colaboración",
       contact_dm_title: "Escríbeme por privado:",
+      colleague_text: "También puedes ver el portafolio de mi colega y encargarle algo a él también:",
+      colleague_btn: "Portafolio del colega",
     },
     zh: {
       order_template: "你好！我想委托一幅作品 🎨\n\n• 称呼： \n• 作品类型： \n• 创意描述： \n• 参考（链接）： \n• 预算： \n• 期望完成时间： \n• 如何联系我： ",
@@ -605,6 +613,8 @@ document.addEventListener("DOMContentLoaded", function () {
       order_images_title: "价格表",
       collab_images_title: "合作方案",
       contact_dm_title: "私信联系我：",
+      colleague_text: "你也可以看看我同事的作品集，也可以向他下单：",
+      colleague_btn: "同事的作品集",
     },
     ko: {
       order_template: "안녕하세요! 커미션을 의뢰하고 싶어요 🎨\n\n• 이름/닉네임: \n• 작업 종류: \n• 아이디어 설명: \n• 레퍼런스(링크): \n• 예산: \n• 희망 마감일: \n• 연락 방법: ",
@@ -614,6 +624,8 @@ document.addEventListener("DOMContentLoaded", function () {
       order_images_title: "가격표",
       collab_images_title: "협업 안내",
       contact_dm_title: "개인 메시지로 연락주세요:",
+      colleague_text: "제 동료의 포트폴리오도 둘러보고 그에게도 의뢰하실 수 있어요:",
+      colleague_btn: "동료의 포트폴리오",
     },
   };
   SUPPORTED_LANGS.forEach((lang) => {
@@ -2365,12 +2377,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!heroTitle || !heroWrap) return;
 
     // Ник «выстраивается из квадратиков»: текст разбивается на буквы, каждая
-    // буква собирается из маленького квадрата-блока (clip-path), а вокруг неё
-    // слетаются и оседают квадратные частицы — «мотыльковая пыль».
+    // буква рождается из маленького квадрата (clip-path) с лёгким наклоном, а
+    // вокруг по дуге слетаются и оседают квадратные частицы — «мотыльковая пыль».
     const fullText = (heroTitle.textContent || "").trim();
     if (!fullText) return;
 
-    // Чистим возможные прошлые частицы и пере-собираем буквы.
     heroWrap.querySelectorAll(".pixel").forEach((p) => p.remove());
     heroTitle.classList.remove("title-build");
     heroTitle.textContent = "";
@@ -2381,6 +2392,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const span = document.createElement("span");
       span.className = "hero-glyph";
       span.style.setProperty("--gi", String(idx));
+      span.style.setProperty("--gr", (Math.random() * 16 - 8).toFixed(1) + "deg");
       if (ch === " ") {
         span.classList.add("is-space");
         span.innerHTML = "&nbsp;";
@@ -2391,28 +2403,32 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     heroTitle.appendChild(frag);
 
-    // Принудительный reflow, затем запуск сборки букв.
-    void heroTitle.offsetWidth;
+    void heroTitle.offsetWidth; // reflow перед запуском сборки
     heroTitle.classList.add("title-build");
 
-    // Квадратные частицы, которые «оседают» к строке ника по мере его сборки.
-    const pixels = 16;
+    // Квадратные частицы: старт (разброс) → дуга (промежуточная точка) → строка.
+    const pixels = 26;
     for (let i = 0; i < pixels; i++) {
       const s = document.createElement("span");
       s.className = "pixel";
-      // Стартовый разброс (далеко) и финальная позиция (у самой строки).
-      const fx = Math.floor(Math.random() * 360 - 180) + "px";
-      const fy = Math.floor(Math.random() * 200 - 130) + "px";
-      const tx = Math.floor(Math.random() * 300 - 150) + "px";
-      const ty = Math.floor(Math.random() * 26 - 13) + "px";
-      const sz = (6 + Math.floor(Math.random() * 7)) + "px";
-      const delay = (120 + Math.floor(Math.random() * 480)) + "ms";
-      s.style.setProperty("--fx", fx);
-      s.style.setProperty("--fy", fy);
-      s.style.setProperty("--tx", tx);
-      s.style.setProperty("--ty", ty);
-      s.style.setProperty("--sz", sz);
-      s.style.setProperty("--delay", delay);
+      const fx = Math.floor(Math.random() * 440 - 220);
+      const fy = Math.floor(Math.random() * 260 - 160);
+      const tx = Math.floor(Math.random() * 320 - 160);
+      const ty = Math.floor(Math.random() * 30 - 15);
+      const mx = Math.round((fx + tx) / 2 + (Math.random() * 130 - 65));
+      const my = Math.round((fy + ty) / 2 - (40 + Math.random() * 90));
+      const sz = 5 + Math.floor(Math.random() * 12);
+      const rot = Math.floor(Math.random() * 360 - 180);
+      const delay = 100 + Math.floor(Math.random() * 640);
+      s.style.setProperty("--fx", fx + "px");
+      s.style.setProperty("--fy", fy + "px");
+      s.style.setProperty("--mx", mx + "px");
+      s.style.setProperty("--my", my + "px");
+      s.style.setProperty("--tx", tx + "px");
+      s.style.setProperty("--ty", ty + "px");
+      s.style.setProperty("--sz", sz + "px");
+      s.style.setProperty("--rot", rot + "deg");
+      s.style.setProperty("--delay", delay + "ms");
       heroWrap.appendChild(s);
       s.addEventListener("animationend", () => s.remove());
     }
